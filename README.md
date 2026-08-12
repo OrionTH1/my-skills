@@ -7,6 +7,7 @@ Skills e regras que eu uso no Claude Code, versionadas aqui porque a configuraç
 | Arquivo | O que faz |
 |---|---|
 | [`skills/resume-bullets`](skills/resume-bullets/SKILL.md) | Transforma um projeto ou uma sessão de trabalho em bullet points de currículo, no formato X-Y-Z, com os termos literais que as vagas usam e com toda métrica rastreável a uma evidência |
+| [`skills/commit`](skills/commit/SKILL.md) | Convenção de commit: uma linha, sem corpo, sem escopo e sem trailer de co-autor, com a divisão por intenção |
 | [`rules/prose.md`](rules/prose.md) | Como escrever documentação que não soa gerada por máquina. Vale sempre, em qualquer projeto |
 
 A diferença entre os dois: skill você invoca quando precisa, regra vale o tempo todo.
