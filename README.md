@@ -1,25 +1,32 @@
 # my-skills
 
-Skills e regras que eu uso no Claude Code, versionadas aqui porque a configuração local não sobrevive a uma limpeza de diretório.
+Skills que eu uso no Claude Code, versionadas aqui porque configuração local não sobrevive a uma limpeza de diretório.
 
 ## O que tem
 
-| Arquivo | O que faz |
+| Skill | O que faz |
 |---|---|
-| [`skills/resume-bullets`](skills/resume-bullets/SKILL.md) | Transforma um projeto ou uma sessão de trabalho em bullet points de currículo, no formato X-Y-Z, com os termos literais que as vagas usam e com toda métrica rastreável a uma evidência |
-| [`skills/commit`](skills/commit/SKILL.md) | Convenção de commit: uma linha, sem corpo, sem escopo e sem trailer de co-autor, com a divisão por intenção |
-| [`rules/prose.md`](rules/prose.md) | Como escrever documentação que não soa gerada por máquina. Vale sempre, em qualquer projeto |
-
-A diferença entre os dois: skill você invoca quando precisa, regra vale o tempo todo.
+| [`prose`](skills/prose/SKILL.md) | Como escrever documentação que não soa gerada por máquina |
+| [`commit`](skills/commit/SKILL.md) | Convenção de commit: uma linha, sem corpo, sem escopo e sem trailer de co-autor, com a divisão por intenção |
+| [`resume-bullets`](skills/resume-bullets/SKILL.md) | Transforma um projeto ou uma sessão de trabalho em bullet points de currículo, no formato X-Y-Z, com os termos literais que as vagas usam e com toda métrica rastreável a uma evidência |
 
 ## Instalar
 
-O Claude Code lê skills de `~/.claude/skills/` e regras globais de `~/.claude/rules/`. Link simbólico mantém os dois lugares em sincronia, então editar aqui já vale lá:
+Pelo [skills CLI](https://github.com/vercel-labs/skills), que funciona com Claude Code, Cursor, Codex e outros. Não precisa de registro: ele lê os `SKILL.md` direto do repositório.
 
 ```bash
-git clone https://github.com/OrionTH1/my-skills.git ~/Documents/Dev/my-skills
-ln -s ~/Documents/Dev/my-skills/skills/resume-bullets ~/.claude/skills/resume-bullets
-ln -s ~/Documents/Dev/my-skills/rules/prose.md ~/.claude/rules/prose.md
+npx skills add OrionTH1/my-skills -g          # todas, global
+npx skills add OrionTH1/my-skills             # todas, só neste projeto
+npx skills add OrionTH1/my-skills --skill prose
+npx skills add OrionTH1/my-skills --list      # ver antes de instalar
 ```
 
-Skill também pode ser por projeto, em `.claude/skills/` dentro do repositório, quando a convenção só faz sentido ali.
+Instalação de projeto escreve um `skills-lock.json` com o hash de cada skill. Vale versionar: `npx skills check` avisa quando a origem mudou, e `npx skills install` restaura tudo numa máquina nova.
+
+## Editar
+
+Skill instalada pelo CLI é cópia, então editar em `~/.claude/skills/` não volta para cá. Para mexer no conteúdo, edite neste repositório, faça o push, e sincronize com:
+
+```bash
+npx skills update
+```

@@ -1,4 +1,11 @@
-Documentation, READMEs and any prose written for a project have to read like a person wrote them. The dominant tell of machine-written text is not incorrect grammar, it is uniform rhythm: sentence after sentence in the 18-28 word range, every section closing on a tidy verdict. Write against that.
+---
+name: prose
+description: Write documentation, READMEs, commit-adjacent text, reports or any prose meant for a person to read, so it does not read as machine-generated. Load this before writing or editing user-facing text.
+---
+
+# Prose
+
+Prose written for a project has to read like a person wrote it. The dominant tell of machine-written text is not incorrect grammar, it is uniform rhythm: sentence after sentence in the 18-28 word range, every section closing on a tidy verdict. Write against that.
 
 Rules, in order of how often they are broken:
 
