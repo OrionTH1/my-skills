@@ -13,6 +13,7 @@ Skills que eu uso no Claude Code, versionadas aqui porque configuração local n
 | [`sdd-techspec`](skills/sdd-techspec/SKILL.md) | SDD, passo 2 — traduz o PRD em decisão técnica e arquitetura, sem código além de assinatura de interface |
 | [`sdd-tasks`](skills/sdd-tasks/SKILL.md) | SDD, passo 3 — cria todas as tasks de uma vez com código proposto, espera aprovação do lote, executa tudo sem parar em desvio |
 | [`sdd-review`](skills/sdd-review/SKILL.md) | SDD, passo 4 — reconcilia PRD e techspec com a realidade, verifica contra convenção do projeto e roda teste, build e lint |
+| [`gh-pr`](skills/gh-pr/SKILL.md) | Abre PR com o `gh`: roda typecheck, testes e build em cada repositório da feature, cria a PR em draft contra a `developer` e escreve a descrição só com "Descrição" e "Alterações realizadas" |
 
 As quatro `sdd-*` formam um pipeline: `sdd-prd` → `sdd-techspec` → `sdd-tasks` → `sdd-review`. PRD e techspec são documentos vivos, permanentes, com histórico datado; as tasks são descartadas depois que o review reconcilia tudo contra o código real. Nenhuma delas conhece fato de projeto específico — tudo vem do que a skill lê no repositório atual (`CLAUDE.md`, regras, docs), o que é o que as torna portáveis entre projetos.
 
