@@ -1,23 +1,36 @@
 ---
 name: gh-pr
-description: Abre pull requests com o gh no padrão do usuário. Roda os checks obrigatórios (typecheck, testes e build) em cada repositório envolvido, envia a branch, cria a PR em draft contra a developer e escreve a descrição com exatamente duas seções, "Descrição" e "Alterações realizadas". Use quando o usuário pedir para abrir PR, criar pull request, subir a branch para revisão ou reescrever a descrição de uma PR.
+description: Abre pull requests com o gh no padrão do usuário. Roda os checks obrigatórios (typecheck, testes e build) em cada repositório envolvido, envia a branch, cria a PR em draft contra a branch de desenvolvimento do repositório e escreve a descrição com exatamente duas seções, "Descrição" e "Alterações realizadas". Use quando o usuário pedir para abrir PR, criar pull request, subir a branch para revisão ou reescrever a descrição de uma PR.
 ---
 
 # Abrir PR com gh
 
 Abre uma PR por repositório envolvido na feature, sempre em draft, depois de conferir que o código compila, passa nos testes e builda. A descrição conta a feature para quem revisa; não é relatório do desenvolvimento.
 
-<critical>Toda PR nasce em draft, com base `developer`, a não ser que o usuário peça outra base. Esta skill nunca tira uma PR do draft.</critical>
+<critical>Toda PR nasce em draft, com base na branch de desenvolvimento do repositório, a não ser que o usuário peça outra base. Nunca abra PR contra a `main` ou a `master` sem o usuário pedir. Esta skill nunca tira uma PR do draft.</critical>
 
-## 1. Repositórios e branches
+## 1. Repositórios, base e branches
 
-Descubra em quais repositórios a feature mexeu. Uma feature pode ocupar mais de um (por exemplo, API e front): cada um com commits à frente de `origin/developer` ganha a sua PR.
+Descubra em quais repositórios a feature mexeu. Uma feature pode ocupar mais de um (por exemplo, API e front): cada um com commits à frente da sua base ganha a sua PR.
+
+### Base
+
+A base é a branch de desenvolvimento do repositório, onde as features entram antes de chegar à produção. Ela não é a branch padrão do GitHub: em muitos repositórios a padrão é a `main`, e abrir PR de feature contra ela pularia a etapa de desenvolvimento. Descubra a base de cada repositório, nesta ordem:
+
+1. A documentação do repositório (`CLAUDE.md`, `CONTRIBUTING.md`, `README.md`, regras em `.claude/rules/` ou equivalente) diz para qual branch as PRs vão.
+2. A branch de onde a branch atual saiu, quando o upstream dela aponta para uma branch de desenvolvimento (`git rev-parse --abbrev-ref @{upstream}`).
+3. Uma branch remota com nome de desenvolvimento: `git branch -r` com `developer`, `develop`, `development`, `dev` ou `staging`.
+4. A base das PRs de feature recentes: `gh pr list --state all --limit 20 --json baseRefName,headRefName`.
+
+Se as fontes discordarem, ou se só sobrar a `main`/`master`, pare e pergunte ao usuário qual é a base. Quando a feature tem PR em mais de um repositório, descubra a base de cada um separadamente.
+
+### Branches
 
 Para cada repositório:
 
-1. Busque a base: `git fetch origin developer`.
-2. Confira a branch atual e os commits que vão para a PR: `git log origin/developer..HEAD --oneline`. Sem commits, não há PR para abrir nesse repositório.
-3. Se a branch atual for a `developer` ou a `main`, pare e pergunte em qual branch a PR deve sair.
+1. Busque a base: `git fetch origin <base>`.
+2. Confira a branch atual e os commits que vão para a PR: `git log origin/<base>..HEAD --oneline`. Sem commits, não há PR para abrir nesse repositório.
+3. Se a branch atual for a própria base, a `main` ou a `master`, pare e pergunte em qual branch a PR deve sair.
 4. Se houver alteração não commitada, pergunte se ela entra na PR. Não commite por conta própria.
 
 ## 2. Checks obrigatórios
@@ -103,7 +116,7 @@ Não entram, a não ser que sejam a própria mudança da PR (uma PR só de teste
 
 ### Como escrever
 
-1. Leia o PRD da feature, se existir, o diff contra a base (`git diff origin/developer...HEAD --stat` e os arquivos que importam) e os commits.
+1. Leia o PRD da feature, se existir, o diff contra a base (`git diff origin/<base>...HEAD --stat` e os arquivos que importam) e os commits.
 2. Escreva no idioma das PRs e commits recentes do repositório, com frases diretas e detalhe concreto (nome da peça, o que ela faz). Evite travessão, tríades forçadas e frases de efeito no fim dos parágrafos.
 3. Confira o texto contra a lista do passo 7.
 
@@ -112,7 +125,7 @@ Não entram, a não ser que sejam a própria mudança da PR (uma PR só de teste
 Grave o corpo num arquivo temporário (no scratchpad da sessão, quando houver) e crie:
 
 ```bash
-gh pr create --draft --base developer --head <branch> --title "<título>" --body-file <arquivo>
+gh pr create --draft --base <base> --head <branch> --title "<título>" --body-file <arquivo>
 ```
 
 Se já existir PR aberta para a branch (`gh pr view <branch>`), não crie outra. Avise o usuário e só reescreva a descrição (`gh pr edit <número> --body-file <arquivo>`) se ele pedir.
@@ -125,7 +138,7 @@ Confirme o resultado com `gh pr view <número> --json isDraft,baseRefName,url`.
 
 - [ ] Checks obrigatórios passaram em cada repositório com PR
 - [ ] Push com `git push -u origin <branch>`, sem `--no-verify` não autorizado
-- [ ] PR em draft, base `developer` (ou a que o usuário pediu)
+- [ ] PR em draft, com base na branch de desenvolvimento do repositório (ou na que o usuário pediu), nunca na `main`/`master` sem pedido
 - [ ] Só as seções `## Descrição` e `## Alterações realizadas`, nesta ordem, sem texto fora delas
 - [ ] A Descrição diz o que é a feature, para quem, qual problema resolve e por quê
 - [ ] Nenhuma menção a conversa, decisões do desenvolvimento, QA, testes, build ou ferramentas
