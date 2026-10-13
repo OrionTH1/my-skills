@@ -1,6 +1,6 @@
 ---
 name: gh-pr
-description: Abre pull requests com o gh no padrão do usuário. Roda os checks obrigatórios (typecheck, testes e build) em cada repositório envolvido, envia a branch, cria a PR em draft contra a branch de desenvolvimento do repositório e escreve a descrição com exatamente duas seções, "Descrição" e "Alterações realizadas". Use quando o usuário pedir para abrir PR, criar pull request, subir a branch para revisão ou reescrever a descrição de uma PR.
+description: Abre pull requests com o gh no padrão do usuário. Roda os checks obrigatórios (typecheck, testes e build) em cada repositório envolvido, envia a branch, cria a PR em draft contra a branch de desenvolvimento do repositório, escreve a descrição com exatamente duas seções, "Descrição" e "Alterações realizadas", atribui a PR ao usuário e põe a label do tipo da mudança. Use quando o usuário pedir para abrir PR, criar pull request, subir a branch para revisão ou reescrever a descrição de uma PR.
 ---
 
 # Abrir PR com gh
@@ -130,15 +130,37 @@ gh pr create --draft --base <base> --head <branch> --title "<título>" --body-fi
 
 Se já existir PR aberta para a branch (`gh pr view <branch>`), não crie outra. Avise o usuário e só reescreva a descrição (`gh pr edit <número> --body-file <arquivo>`) se ele pedir.
 
+Se o `gh pr create` falhar com erro do GitHub (por exemplo, `GraphQL: Something went wrong`), confira com `gh pr view <branch>` se a PR chegou a ser criada antes de tentar de novo. Assim não sai PR duplicada.
+
 Com PRs em mais de um repositório, crie todas e depois acrescente a frase de referência cruzada na Descrição de cada uma, com `gh pr edit`.
 
-Confirme o resultado com `gh pr view <número> --json isDraft,baseRefName,url`.
+### Responsável e labels
+
+Toda PR criada por esta skill sai atribuída ao usuário e com a label do tipo da mudança:
+
+```bash
+gh pr edit <número> --add-assignee @me --add-label <label>
+```
+
+Escolha a label pelo tipo do título, entre as que existem no repositório (`gh label list`):
+
+| Tipo do título | Label |
+|---|---|
+| `feat` | `feature` |
+| `fix` | `bug` |
+| `refact`, `refactor`, `perf` | `enhancement` |
+| `docs` | `documentation` |
+
+Quando o tipo não estiver na tabela, ou a label correspondente não existir no repositório, pergunte ao usuário qual label usar, mostrando as que existem. Com PRs em mais de um repositório, use a mesma label em todas. Não crie label nova sem o usuário pedir.
+
+Confirme o resultado com `gh pr view <número> --json isDraft,baseRefName,url,assignees,labels`.
 
 ## 7. Conferência
 
 - [ ] Checks obrigatórios passaram em cada repositório com PR
 - [ ] Push com `git push -u origin <branch>`, sem `--no-verify` não autorizado
 - [ ] PR em draft, com base na branch de desenvolvimento do repositório (ou na que o usuário pediu), nunca na `main`/`master` sem pedido
+- [ ] PR atribuída ao usuário (`@me`) e com a label do tipo da mudança, a mesma em todos os repositórios da feature
 - [ ] Só as seções `## Descrição` e `## Alterações realizadas`, nesta ordem, sem texto fora delas
 - [ ] A Descrição diz o que é a feature, para quem, qual problema resolve e por quê
 - [ ] Nenhuma menção a conversa, decisões do desenvolvimento, QA, testes, build ou ferramentas
@@ -148,7 +170,7 @@ Confirme o resultado com `gh pr view <número> --json isDraft,baseRefName,url`.
 
 ## 8. Entregar
 
-Mostre o link de cada PR e lembre que elas estão em draft: o usuário revisa e tira do draft quando quiser.
+Mostre o link de cada PR, com o responsável e a label, e lembre que elas estão em draft: o usuário revisa e tira do draft quando quiser.
 
 ## Exemplo de descrição
 
