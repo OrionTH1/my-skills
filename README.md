@@ -1,7 +1,6 @@
 # my-skills
 
-Skills que eu uso no Claude Code, versionadas aqui porque configuração local não sobrevive a uma limpeza de diretório.
-
+Skills que eu uso no Claude Code.
 ## O que tem
 
 | Skill | O que faz |
