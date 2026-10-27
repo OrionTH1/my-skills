@@ -11,12 +11,13 @@ Skills que eu uso no Claude Code.
 | [`sdd-prd`](skills/sdd-prd/SKILL.md) | Fluxo de Spec Driven Development, passo 1 — cria ou atualiza o PRD de uma feature: o quê, por quê, sem implementação |
 | [`sdd-techspec`](skills/sdd-techspec/SKILL.md) | SDD, passo 2 — traduz o PRD em decisão técnica e arquitetura, sem código além de assinatura de interface |
 | [`sdd-tasks`](skills/sdd-tasks/SKILL.md) | SDD, passo 3 — cria todas as tasks de uma vez com código proposto, espera aprovação do lote, executa tudo sem parar em desvio |
+| [`sdd-qa`](skills/sdd-qa/SKILL.md) | SDD, entre as tasks e o review — QA adversarial contra o PRD e o techspec: veredicto por requisito, bugs conhecidos retestados, uma rodada inteira tentando quebrar a feature de propósito, e nada aprovado sem ter sido testado |
 | [`sdd-review`](skills/sdd-review/SKILL.md) | SDD, passo 4 — reconcilia PRD e techspec com a realidade, verifica contra convenção do projeto e roda teste, build e lint |
 | [`gh-pr`](skills/gh-pr/SKILL.md) | Abre PR com o `gh`: roda typecheck, testes e build em cada repositório da feature, cria a PR em draft contra a branch de desenvolvimento (nunca a `main` sem pedido) escreve a descrição só com "Descrição" e "Alterações realizadas", atribui a PR a quem abriu e põe a label do tipo da mudança |
 | [`feature-prints`](skills/feature-prints/SKILL.md) | Tira prints recortados de uma feature de front rodando no app local e anota com caixas, setas e rótulos numerados, prontos para anexar na PR |
 | [`carreira-entregas`](skills/carreira-entregas/SKILL.md) | Ao terminar uma feature, transforma PRD, techspec, git e conversa em entregas para a aba Carreira do Portal de Vagas, num JSON para colar no editor de Nova entrega; separa uma feature grande em várias entregas, nunca inventa número e traz um validador em `scripts/validate.mjs` |
 
-As quatro `sdd-*` formam um pipeline: `sdd-prd` → `sdd-techspec` → `sdd-tasks` → `sdd-review`. PRD e techspec são documentos vivos, permanentes, com histórico datado; as tasks são descartadas depois que o review reconcilia tudo contra o código real. Nenhuma delas conhece fato de projeto específico — tudo vem do que a skill lê no repositório atual (`CLAUDE.md`, regras, docs), o que é o que as torna portáveis entre projetos.
+As cinco `sdd-*` formam um pipeline: `sdd-prd` → `sdd-techspec` → `sdd-tasks` → `sdd-qa` → `sdd-review`. PRD e techspec são documentos vivos, permanentes, com histórico datado; as tasks são descartadas depois que o review reconcilia tudo contra o código real. Nenhuma delas conhece fato de projeto específico — tudo vem do que a skill lê no repositório atual (`CLAUDE.md`, regras, docs), o que é o que as torna portáveis entre projetos.
 
 ## Instalar
 
